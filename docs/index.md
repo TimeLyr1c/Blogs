@@ -1,17 +1,9 @@
-# Welcome to MkDocs
+# TimeLyr1c's Blog
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+**This is William Hao. I share my life studying computer science and music here.**
 
-## Commands
+## Access to my social media accounts
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+[:fontawesome-brands-bilibili: Find me on Bilibili](https://space.bilibili.com/1978773038?spm_id_from=333.1387.0.0){ .md-button}
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+I hope you can like my daily blogs.
