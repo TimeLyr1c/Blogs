@@ -1,3 +1,8 @@
+---
+date:
+  created: 2025-08-18
+---
+
 # Java Tutorial
 
 ## Introduction
