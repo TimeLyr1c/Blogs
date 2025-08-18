@@ -5,9 +5,9 @@ site_description: This is a static site for William Hao to update blogs and musi
 theme:
   name: material
   palette:
-    primary: red
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
+      primary: red
       toggle:
         icon: material/brightness-auto
         name: Switch to light mode
@@ -15,6 +15,7 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: red
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -22,6 +23,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: red
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
