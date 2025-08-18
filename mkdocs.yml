@@ -5,6 +5,7 @@ site_description: This is a static site for William Hao to update blogs and musi
 theme:
   name: material
   palette:
+    primary: red
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:
