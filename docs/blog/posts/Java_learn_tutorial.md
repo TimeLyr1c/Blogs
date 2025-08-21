@@ -1,6 +1,7 @@
 ---
 date:
-  created: 2025-08-18
+  created: 2025-08-21
+draft: True
 ---
 
 # Java Tutorial
