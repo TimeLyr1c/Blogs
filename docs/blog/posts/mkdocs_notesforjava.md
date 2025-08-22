@@ -5,7 +5,7 @@ date:
 
 # 记一次 Mkdocs 调试记录
 
-终于结束了两个月的夏校和 SAT，在考虑高三一年要做些什么，突然想到可以通过还算熟悉的 Mkdocs 搭建一个站点，做一个 Java 学习的笔记，不仅自己方便看，也可以分享给别人，或者放到 github 上获得星星。说干就干，Mkdocs 的搜索功能和天生就能在 github pages 上免费搭建的特性最好不过了。
+终于结束了两个月的夏校和 SAT，在考虑高三一年要做些什么，突然想到可以通过还算熟悉的 Mkdocs 搭建一个站点，做一个 Java 学习的笔记，不仅自己方便看，也可以分享给别人，或者放到 github 上获得星星。说干就干，Material 的搜索功能和天生就能在 github pages 上免费搭建的特性最好不过了。
 
 ## 创建站点
 
@@ -130,4 +130,84 @@ nav:
 
 本来以为大功告成了，但是在切换目录的时候有的时候突然会退回首页。又去 FastAPI 的文档看了一遍，发现这个文档的跳转竟然比我自己的还乱，不仅有的时候会跳回首页，Translator 的翻译有的时候也不完全。再次尝试把英语页面的文件又在`docs`主文件夹复制了一份，当作默认的语言，但是也没有用。最终决定创建两个项目，对应两个仓库，等挂上域名了再分别在配置文件里互相指向。
 
-####
+#### 分别将两个仓库部署到 Github Pages
+
+将两个仓库都 push 到 github 上，就可以开始部署了。创建一个 Github Action，并添加`ci.yml`文件，写入 Material 的配置就可以自动部署到 Github Pages 了，页面会出现在`<username>.github.io/<repo_name>`。每次从本地提交代码 push 到 github 之后都会自动重新 Deploy，可以说是很方便了。
+
+```yml
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install mkdocs-material
+      - run: mkdocs gh-deploy --force
+```
+
+#### 域名绑定及解析记录设置
+
+先租了一年的域名，要等 2 小时左右才能全球都解析成功，把 A 记录直接解析到四个 Github Pages 的永久地址，然后把 www 的 CNAME 指到英文站点，把 cn 的 CNAME 指到中文站点，然后在 Github Pages 下更改 Custom URL 就大功告成了。每次输入根域名，都会跳转到 www 的英文站点，就算输入 GitHub Pages 的地址，也会 301 直接解析到我的域名去。
+
+```URL
+notesofjava.com -> www.notesofjava.com
+cn.notesofjava.com
+timelyr1c.github.io/notes_of_java -> www.notesofjava.com
+```
+
+#### 设置两个站点的语言切换
+
+最后就是实现 Material 里语言切换器的跳转。在 GitHub Pages 勾选`Enforce HTTPS`，然后修改配置文件。
+
+```yml
+extra:
+  alternate:
+    - name: English
+      link: www.notesofjava.com
+      lang: en
+    - name: 简体中文
+      link: cn.notesofjava.com
+      lang: zh
+```
+
+但是更改 push 之后跳转的时候变成了相对的文件夹路径。
+
+```
+www.notesofjava.com/cn.notesofjava.com
+```
+
+后来查看了许多文档，原来是在填写`Link`字段的时候，如果要以 URL 为链接，必须要填写 HTTPS 前缀，强制让它识别协议，这样就可以正常跳转了。
+
+```yml
+extra:
+  alternate:
+    - name: English
+      link: https://www.notesofjava.com
+      lang: en
+    - name: 简体中文
+      link: https://cn.notesofjava.com
+      lang: zh
+```
+
+终于跳转成功，后面就可以正常更新文章了。
